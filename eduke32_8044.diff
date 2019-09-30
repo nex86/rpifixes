@@ -1,0 +1,84 @@
+Index: source/build/src/engine.cpp
+===================================================================
+--- source/build/src/engine.cpp	(revision 8044)
++++ source/build/src/engine.cpp	(working copy)
+@@ -8773,28 +8773,9 @@
+     int32_t i = spritesortcnt-1;
+     int32_t numSprites = spritesortcnt;
+ 
+-    if (videoGetRenderMode() == REND_POLYMOST)
++    for (; i >= 0; --i)
+     {
+-        spritesortcnt = 0;
+-        int32_t back = i;
+-        for (; i >= 0; --i)
+-        {
+-            if (polymost_spriteHasTranslucency(&tsprite[i]))
+-            {
+-                tspriteptr[spritesortcnt] = &tsprite[i];
+-                ++spritesortcnt;
+-            } else
+-            {
+-                tspriteptr[back] = &tsprite[i];
+-                --back;
+-            }
+-        }
+-    } else
+-    {
+-        for (; i >= 0; --i)
+-        {
+-            tspriteptr[i] = &tsprite[i];
+-        }
++        tspriteptr[i] = &tsprite[i];
+     }
+ 
+     for (i=spritesortcnt-1; i>=0; --i)
+Index: source/duke3d/src/actors.cpp
+===================================================================
+--- source/duke3d/src/actors.cpp	(revision 8044)
++++ source/duke3d/src/actors.cpp	(working copy)
+@@ -7616,7 +7616,7 @@
+                     }
+ 
+                     //if we are benchmarking, take a screenshot at each waypoint (camera start point/locator)
+-                    benchmarkScreenshot = g_BenchmarkMode == BENCHMARKMODE_GENERATE_REFERENCE;
++                    //benchmarkScreenshot = g_BenchmarkMode == BENCHMARKMODE_GENERATE_REFERENCE;
+                 }
+                 if (pSprite->owner == -1)
+                 {
+Index: source/duke3d/src/game.cpp
+===================================================================
+--- source/duke3d/src/game.cpp	(revision 8044)
++++ source/duke3d/src/game.cpp	(working copy)
+@@ -803,7 +803,7 @@
+         CAMERA(q16ang) = fix16_from_int(actor[ud.camerasprite].tempang
+                                       + mulscale16(((pSprite->ang + 1024 - actor[ud.camerasprite].tempang) & 2047) - 1024, smoothRatio));
+ 
+-        renderSetRollAngle(0);
++        //renderSetRollAngle(0);
+ 
+         int const noDraw = VM_OnEventWithReturn(EVENT_DISPLAYROOMSCAMERA, ud.camerasprite, playerNum, 0);
+ 
+@@ -955,7 +955,7 @@
+             }
+             else
+             {
+-                renderSetRollAngle(0);
++                //renderSetRollAngle(0);
+             }
+         }
+ 
+Index: source/duke3d/src/startgtk.game.cpp
+===================================================================
+--- source/duke3d/src/startgtk.game.cpp	(revision 8044)
++++ source/duke3d/src/startgtk.game.cpp	(working copy)
+@@ -874,7 +874,7 @@
+     if (retval) // launch the game with these parameters
+     {
+         ud.setup = settings.shared;
+-        glrendmode = (settings.polymer) ? REND_POLYMER : REND_POLYMOST;
++        int glrendmode = (settings.polymer) ? REND_POLYMER : REND_POLYMOST;
+         g_selectedGrp = settings.grp;
+ 
+         Bstrcpy(g_modDir, (g_noSetup == 0 && settings.gamedir != NULL) ? settings.gamedir : "/");
+		 }
